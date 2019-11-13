@@ -26,25 +26,25 @@ init:
 
     ;  We load the tile in memory of tiles
  
-    ld      hl, smiley  ; HL loaded in the direction of our tile
-    ld      de, _VRAM   ; address in the video memory
-    ld      b, 16       ; b = 16, number of bytes to copy
+    ld hl, smiley       ; HL loaded in the direction of our tile
+    ld de, _VRAM        ; address in the video memory
+    ld b, 16            ; b = 16, number of bytes to copy
 
 .load_loop:
-    ld      a,[hl]              ; A load in the data pointed to by HL
-    ld      [de], a             ; and we put in the address pointed in DE
-    dec     b                   ; decrement b, b = b-1
-    jr      z, .fin_load_loop   ; if b = 0, we're finish, nothing left to copy
-    inc     hl                  ; We increase the read direction
-    inc     de                  ; We increase the write direction
-    jr      .load_loop          ; we follow
+    ld a,[hl]           ; A load in the data pointed to by HL
+    ld [de], a          ; and we put in the address pointed in DE
+    dec b               ; decrement b, b = b-1
+    jr z, .fin_load_loop; if b = 0, we're finished, nothing left to copy
+    inc hl              ; We increase the read direction
+    inc de              ; We increase the write direction
+    jr .load_loop       ; we follow
 
 .fin_load_loop:
  
     ;  We write our tile, tiles on the map
  
-    ld      hl, _SCRN0      ; HL in the direction of the background map
-    ld      [hl], $00       ; $00 = tile 0, our tile.
+    ld hl, _SCRN0       ; HL in the direction of the background map
+    ld [hl], $00        ; $00 = tile 0, our tile.
  
     ; configure and activate the display
     ld      a, LCDCF_ON|LCDCF_BG8000|LCDCF_BG9800|LCDCF_BGON|LCDCF_OBJ8|LCDCF_OBJOFF
@@ -54,28 +54,28 @@ init:
 loop:
     halt
     nop
-    jr      loop
+    jr loop
 
     ; LCD shutdown routine
 turn_off_LCD:
-    ld      a,[rLCDC]
-    rlca                    ; It sets the high bit of LCDC in the carry flag
-    ret     nc              ; Display is already off, again.
+    ld a, [rLCDC]
+    rlca                ; It sets the high bit of LCDC in the carry flag
+    ret nc              ; Display is already off, again.
  
     ; We VBlank hope to, because we can not turn off the screen
     ; some other time
 
 .wait_VBlank
-    ld      a, [rLY]
-    cp      145
-    jr      nz, .wait_VBlank
+    ld a, [rLY]
+    cp 145
+    jr nz, .wait_VBlank
  
     ; we are in VBlank, we turn off the LCD
-    ld      a,[rLCDC]       ; in A, the contents of the LCDC
-    res     7,a             ; we zero bit 7 (on the LCD)
-    ld      [rLCDC],a       ; We wrote in the LCDC register content A
+    ld a, [rLCDC]       ; in A, the contents of the LCDC
+    res 7, a            ; we zero bit 7 (on the LCD)
+    ld [rLCDC], a       ; We wrote in the LCDC register content A
  
-    ret                     ; return
+    ret                 ; return
 
 ;  Our tile data
 smiley:
