@@ -47,8 +47,8 @@ init:
     ld [hl], $00        ; $00 = tile 0, our tile.
  
     ; configure and activate the display
-    ld      a, LCDCF_ON|LCDCF_BG8000|LCDCF_BG9800|LCDCF_BGON|LCDCF_OBJ8|LCDCF_OBJOFF
-    ld      [rLCDC], a
+    ld a, LCDCF_ON|LCDCF_BG8000|LCDCF_BG9800|LCDCF_BGON|LCDCF_OBJ8|LCDCF_OBJOFF
+    ld [rLCDC], a
  
     ; infinite loop
 loop:
